@@ -1,169 +1,243 @@
 :root {
-  --background: #0d1117;
-  --text-color: #c9d1d9;
-  --green: #39d353;
-  --dark-green: #22863a;
-  --blue: #58a6ff;
-  --red: #f85149;
-  --border-color: #30363d;
-  --terminal-bg: #161b22;
+    --background: #0d1117;
+    --text-color: #c9d1d9;
+    --green: #39d353;
+    --dark-green: #22863a;
+    --blue: #58a6ff;
+    --red: #f85149;
+    --border-color: #30363d;
+    --terminal-bg: #161b22;
+    --header-bg: #1e242c;
+    --footer-bg: #1e242c;
+    --font-family-main: 'Fira Code', monospace;
+    --font-family-title: 'Press Start 2P', cursive;
 }
 
 body {
-  font-family: 'Fira Code', monospace;
-  background-color: var(--background);
-  color: var(--text-color);
-  margin: 0;
-  padding: 0;
+    font-family: var(--font-family-main);
+    background-color: var(--background);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .container {
-  display: flex;
-  min-height: 100vh;
+    display: flex;
+    min-height: 100vh;
 }
 
 .sidebar {
-  width: 300px;
-  background-color: var(--terminal-bg);
-  border-right: 1px solid var(--border-color);
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    width: 300px;
+    background-color: var(--terminal-bg);
+    border-right: 1px solid var(--border-color);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
 .profile-section {
-  text-align: center;
+    text-align: center;
 }
 
 .profile-image {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  border: 3px solid var(--green);
-  transition: transform 0.3s ease;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid var(--green);
+    transition: transform 0.3s ease, border-color 0.3s;
 }
 
 .profile-image:hover {
-  transform: scale(1.1);
+    transform: scale(1.1);
 }
 
 .profile-section h1 {
-  font-family: 'Press Start 2P', cursive;
-  font-size: 1.5rem;
-  color: var(--green);
-  margin-top: 1rem;
+    font-family: var(--font-family-title);
+    font-size: 1.5rem;
+    color: var(--green);
+    margin-top: 1rem;
+    transition: color 0.3s;
 }
 
 .profile-section p {
-  font-size: 0.9rem;
-  line-height: 1.5;
+    font-size: 0.9rem;
+    line-height: 1.5;
 }
 
 .tech-stack {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-top: 1rem;
+    margin-top: 2rem;
 }
 
-.tech-stack img {
-  width: 40px;
-  height: 40px;
+.tech-stack h2 {
+    font-family: var(--font-family-title);
+    font-size: 1.2rem;
+    color: var(--green);
+    text-align: center;
+    margin-bottom: 1rem;
+    transition: color 0.3s;
 }
 
 .main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .terminal {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background-color: var(--terminal-bg);
-  margin: 1rem;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
-  overflow: hidden;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--terminal-bg);
+    margin: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
 .terminal-header {
-  background-color: #1e242c;
-  padding: 0.5rem 1rem;
-  border-bottom: 1px solid var(--border-color);
+    background-color: var(--header-bg);
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
 .terminal-title {
-  font-family: 'Press Start 2P', cursive;
-  color: var(--green);
-  font-size: 1rem;
+    font-family: var(--font-family-title);
+    color: var(--green);
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+.terminal-controls button {
+    background: none;
+    border: 1px solid var(--green);
+    color: var(--green);
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.terminal-controls button:hover {
+    background-color: var(--green);
+    color: var(--terminal-bg);
 }
 
 .terminal-body {
-  flex: 1;
-  padding: 1rem;
-  overflow-y: auto;
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
 }
 
 #output .command {
-  color: var(--blue);
+    color: var(--blue);
 }
 
 #output .result {
-  white-space: pre-wrap;
+    white-space: pre-wrap;
+    animation: typing 0.5s steps(40, end);
+    overflow: hidden;
+    border-right: 2px solid var(--green);
+    display: inline-block;
+}
+
+@keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
 }
 
 .input-line {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .prompt {
-  color: var(--green);
-  margin-right: 0.5rem;
+    color: var(--green);
+    margin-right: 0.5rem;
+    transition: color 0.3s;
 }
 
 .terminal-input {
-  flex: 1;
-  background-color: transparent;
-  border: none;
-  color: var(--text-color);
-  font-family: 'Fira Code', monospace;
-  font-size: 1rem;
+    flex: 1;
+    background-color: transparent;
+    border: none;
+    color: var(--text-color);
+    font-family: var(--font-family-main);
+    font-size: 1rem;
 }
 
 .terminal-input:focus {
-  outline: none;
+    outline: none;
 }
 
 .terminal-footer {
-  background-color: #1e242c;
-  padding: 0.5rem 1rem;
-  border-top: 1px solid var(--border-color);
-  text-align: center;
-  font-size: 0.8rem;
+    background-color: var(--footer-bg);
+    padding: 0.5rem 1rem;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    font-size: 0.8rem;
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
 a {
-  color: var(--blue);
-  text-decoration: none;
+    color: var(--blue);
+    text-decoration: none;
 }
 
 a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
+}
+
+/* Light Theme */
+body.light-theme {
+    --background: #f5f5f5;
+    --text-color: #333;
+    --green: #2e7d32;
+    --dark-green: #1b5e20;
+    --blue: #1976d2;
+    --red: #d32f2f;
+    --border-color: #ddd;
+    --terminal-bg: #fff;
+    --header-bg: #f0f0f0;
+    --footer-bg: #f0f0f0;
+}
+
+.mobile-only {
+    display: none;
 }
 
 @media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-  }
+    .mobile-only {
+        display: inline-block;
+    }
 
-  .sidebar {
-    width: 100%;
-    border-right: none;
-    border-bottom: 1px solid var(--border-color);
-  }
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        display: none; /* Hide by default on mobile */
+    }
+
+    .sidebar.active {
+        display: flex;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .terminal {
+        margin: 0;
+        border-radius: 0;
+    }
 }
