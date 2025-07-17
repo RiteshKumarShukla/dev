@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.querySelector('.sidebar');
 
     let soundEnabled = false;
+    const typingSound = new Audio('https://www.soundjay.com/button/sounds/button-7.mp3');
+    const responseSound = new Audio('https://www.soundjay.com/button/sounds/button-10.mp3');
 
     menuToggle.addEventListener('click', () => {
         sidebar.classList.toggle('active');
@@ -39,32 +41,47 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         });
 
-    let projects = [];
-
-    // Fetch projects from GitHub
-    fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=stars&per_page=6`)
-        .then(response => response.json())
-        .then(data => {
-            projects = data.map(repo => ({
-                name: repo.name,
-                description: repo.description,
-                language: repo.language,
-                url: repo.html_url
-            }));
-        });
-
-    // Tech stack
-    const techStack = [
-        'HTML', 'CSS', 'JavaScript', 'Vue.js', 'Nuxt.js', 'React', 'Redux', 'Vuetify', 'Tailwind',
-        'Node.js', 'Express.js', 'MongoDB', 'REST APIs',
-        'Git', 'GitHub', 'Postman', 'Chart.js', 'Axios', 'VS Code', 'Netlify', 'Vercel'
+    const projects = [
+        {
+            name: 'Project 1',
+            description: 'A cool project I worked on.',
+            language: 'JavaScript',
+            url: 'https://github.com/RiteshKumarShukla/Project1'
+        },
+        {
+            name: 'Project 2',
+            description: 'Another cool project.',
+            language: 'Vue.js',
+            url: 'https://github.com/RiteshKumarShukla/Project2'
+        },
+        {
+            name: 'Project 3',
+            description: 'A project that solves a problem.',
+            language: 'Node.js',
+            url: 'https://github.com/RiteshKumarShukla/Project3'
+        }
     ];
 
-    techStack.forEach(tech => {
-        const p = document.createElement('p');
-        p.textContent = tech;
-        techStackContainer.appendChild(p);
-    });
+    // Tech stack
+    const techStack = {
+        frontend: ['HTML', 'CSS', 'JavaScript', 'Vue.js', 'Nuxt.js', 'React', 'Redux', 'Vuetify', 'Tailwind'],
+        backend: ['Node.js', 'Express.js', 'MongoDB', 'REST APIs'],
+        devops: ['Git', 'GitHub', 'Netlify', 'Vercel'],
+        tools: ['Postman', 'Chart.js', 'Axios', 'VS Code']
+    };
+
+    for (const category in techStack) {
+        const categoryTitle = document.createElement('h3');
+        categoryTitle.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+        techStackContainer.appendChild(categoryTitle);
+        const skillList = document.createElement('ul');
+        techStack[category].forEach(tech => {
+            const li = document.createElement('li');
+            li.textContent = tech;
+            skillList.appendChild(li);
+        });
+        techStackContainer.appendChild(skillList);
+    }
 
     const commands = {
         help: () => `
@@ -85,18 +102,32 @@ document.addEventListener('DOMContentLoaded', () => {
             Currently working as a Software Engineer at RMR Technology.
         `,
         experience: () => `
-            RMR Technology - Software Engineer (2023 - Present)
-              - Built and scaled fintech web apps using Node.js, Vue, and MongoDB
-              - Integrated IIFL APIs, improved data processing pipelines
+            <span class="command">RMR Technology - Software Engineer (2023 - Present)</span>
+              - <span class="prompt">Role:</span> Building and scaling fintech web applications.
+              - <span class="prompt">Responsibilities:</span> Developing new features, maintaining existing code, and collaborating with cross-functional teams.
+              - <span class="prompt">Tech Stack:</span> Node.js, Vue.js, MongoDB, Express.js, IIFL APIs.
+              - <span class="prompt">Achievements:</span> Successfully integrated IIFL APIs, leading to a 20% improvement in data processing efficiency.
 
-            Digiblocks LLC - Full Stack Web Developer (2022 - 2023)
-              - Developed user dashboards and REST APIs in MERN stack
-              - Worked closely with design and QA teams for delivery
+            <span class="command">Digiblocks LLC - Full Stack Web Developer (2022 - 2023)</span>
+              - <span class="prompt">Role:</span> Full-stack development of web applications.
+              - <span class="prompt">Responsibilities:</span> Designing and implementing user-facing features, building RESTful APIs, and managing databases.
+              - <span class="prompt">Tech Stack:</span> MERN (MongoDB, Express.js, React, Node.js) stack.
+              - <span class="prompt">Achievements:</span> Developed a new user dashboard that improved user engagement by 15%.
 
-            Masai School - Full Stack Developer Intern (2021 - 2022)
-              - Learned and implemented real-world projects in React, Node, and Express
+            <span class="command">Masai School - Full Stack Developer Intern (2021 - 2022)</span>
+              - <span class="prompt">Role:</span> Intern, learning and applying full-stack development skills.
+              - <span class="prompt">Responsibilities:</span> Collaborated on real-world projects, building applications from scratch.
+              - <span class="prompt">Tech Stack:</span> React, Node.js, Express, MongoDB.
+              - <span class="prompt">Achievements:</span> Successfully completed three major projects, demonstrating proficiency in full-stack development.
         `,
-        skills: () => techStack.join(', '),
+        skills: () => {
+            let skillsOutput = '';
+            for (const category in techStack) {
+                skillsOutput += `\n<span class="command">${category.toUpperCase()}</span>\n`;
+                skillsOutput += `  ${techStack[category].join(', ')}\n`;
+            }
+            return skillsOutput;
+        },
         education: () => `
             Masai School, Bangalore — Full Stack Web Development (2021 - 2022)
             AKTU of Allahabad — BTech. (2016 - 2020)
@@ -200,17 +231,27 @@ document.addEventListener('DOMContentLoaded', () => {
     soundToggle.addEventListener('click', () => {
         soundEnabled = !soundEnabled;
         soundToggle.textContent = soundEnabled ? 'Sound ON' : 'Sound OFF';
+        if (soundEnabled) {
+            responseSound.play();
+        }
     });
 
     function typeResponse(text, element) {
         let i = 0;
         function typing() {
             if (i < text.length) {
+                if (soundEnabled) {
+                    typingSound.currentTime = 0;
+                    typingSound.play();
+                }
                 element.innerHTML += text.charAt(i);
                 i++;
                 setTimeout(typing, 50);
             } else {
                 element.style.borderRight = 'none';
+                if (soundEnabled) {
+                    responseSound.play();
+                }
             }
         }
         typing();
