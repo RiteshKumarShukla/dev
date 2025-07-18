@@ -20,8 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.querySelector('.sidebar');
 
     let soundEnabled = false;
-    const typingSound = new Audio('https://www.soundjay.com/button/sounds/button-7.mp3');
-    const responseSound = new Audio('https://www.soundjay.com/button/sounds/button-10.mp3');
 
     menuToggle.addEventListener('click', () => {
         sidebar.classList.toggle('active');
@@ -199,10 +197,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (commands[cmd]) {
                     const result = commands[cmd](args);
                     if (result) {
-                        typeResponse(result, resultElement);
+                        resultElement.innerHTML = result;
                     }
                 } else {
-                    typeResponse(`Command not found: ${cmd}`, resultElement);
+                    resultElement.innerHTML = `Command not found: ${cmd}`;
                 }
                 output.appendChild(resultElement);
                 terminalInput.value = '';
@@ -221,6 +219,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 historyIndex = commandHistory.length;
                 terminalInput.value = '';
             }
+        } else if (e.key === 'Tab') {
+            e.preventDefault();
+            const currentInput = terminalInput.value.trim().toLowerCase();
+            const suggestions = Object.keys(commands).filter(c => c.startsWith(currentInput));
+            if (suggestions.length === 1) {
+                terminalInput.value = suggestions[0];
+            }
         }
     });
 
@@ -231,31 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
     soundToggle.addEventListener('click', () => {
         soundEnabled = !soundEnabled;
         soundToggle.textContent = soundEnabled ? 'Sound ON' : 'Sound OFF';
-        if (soundEnabled) {
-            responseSound.play();
-        }
     });
-
-    function typeResponse(text, element) {
-        let i = 0;
-        function typing() {
-            if (i < text.length) {
-                if (soundEnabled) {
-                    typingSound.currentTime = 0;
-                    typingSound.play();
-                }
-                element.innerHTML += text.charAt(i);
-                i++;
-                setTimeout(typing, 50);
-            } else {
-                element.style.borderRight = 'none';
-                if (soundEnabled) {
-                    responseSound.play();
-                }
-            }
-        }
-        typing();
-    }
 
     function bootSequence() {
         const bootMessages = [
@@ -264,6 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'Initializing modules...',
             'Connecting to GitHub...',
             'Welcome Ritesh!',
+            "Type 'help' to see the available commands."
         ];
 
         let i = 0;
@@ -271,24 +253,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (i < bootMessages.length) {
                 const bootElement = document.createElement('div');
                 bootElement.classList.add('result');
+                bootElement.innerHTML = bootMessages[i];
                 output.appendChild(bootElement);
-                typeResponse(bootMessages[i], bootElement);
                 i++;
-                setTimeout(showBootMessage, 1000);
-            } else {
-                const welcomeMessage = document.createElement('div');
-                welcomeMessage.innerHTML = `
-                    <pre>
- __          __  _                          _
- \ \        / / | |                        | |
-  \ \  /\  / /__| | ___ ___  _ __ ___   ___| |
-   \ \/  \/ / _ \ |/ __/ _ \| '_ \` _ \ / _ \ |
-    \  /\  /  __/ | (_| (_) | | | | | |  __/_|
-     \/  \/ \___|_|\___\___/|_| |_| |_|\___(_)
-                    </pre>
-                    <p>Welcome to my terminal portfolio. Type 'help' to see the available commands.</p>
-                `;
-                output.appendChild(welcomeMessage);
+                setTimeout(showBootMessage, 500);
             }
         }
         showBootMessage();
