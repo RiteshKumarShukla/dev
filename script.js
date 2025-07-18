@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.querySelector('.sidebar');
 
     let soundEnabled = false;
+    const typingSound = new Audio('https://www.soundjay.com/button/sounds/button-7.mp3');
+    const responseSound = new Audio('https://www.soundjay.com/button/sounds/button-10.mp3');
 
     menuToggle.addEventListener('click', () => {
         sidebar.classList.toggle('active');
@@ -197,10 +199,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (commands[cmd]) {
                     const result = commands[cmd](args);
                     if (result) {
-                        resultElement.innerHTML = result;
+                        typeResponse(result, resultElement);
                     }
                 } else {
-                    resultElement.innerHTML = `Command not found: ${cmd}`;
+                    typeResponse(`Command not found: ${cmd}`, resultElement);
                 }
                 output.appendChild(resultElement);
                 terminalInput.value = '';
@@ -236,7 +238,31 @@ document.addEventListener('DOMContentLoaded', () => {
     soundToggle.addEventListener('click', () => {
         soundEnabled = !soundEnabled;
         soundToggle.textContent = soundEnabled ? 'Sound ON' : 'Sound OFF';
+        if (soundEnabled) {
+            responseSound.play();
+        }
     });
+
+    function typeResponse(text, element) {
+        let i = 0;
+        function typing() {
+            if (i < text.length) {
+                if (soundEnabled) {
+                    typingSound.currentTime = 0;
+                    typingSound.play();
+                }
+                element.innerHTML += text.charAt(i);
+                i++;
+                setTimeout(typing, 50);
+            } else {
+                element.style.borderRight = 'none';
+                if (soundEnabled) {
+                    responseSound.play();
+                }
+            }
+        }
+        typing();
+    }
 
     function bootSequence() {
         const bootMessages = [
